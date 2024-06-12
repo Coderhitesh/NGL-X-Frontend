@@ -124,3 +124,22 @@
         gap: 0px;
     } */
   }
+
+
+  /* toast.css */
+.toast-success {
+    background-color: #4caf50;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .toast-error {
+    background-color: #f44336;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  

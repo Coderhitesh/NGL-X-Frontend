@@ -9,7 +9,7 @@ function ShopAll() {
   useEffect(() => {
     const datafetching = async () => {
       try {
-        const response = await axios.get('https://nglx-cosmetic-backend-git-io.onrender.com/api/get-category');
+        const response = await axios.get('http://localhost:4100/api/get-category');
         console.log(response.data.data);
         setData(response.data.data)
         // const uniqueCategories = new Set();

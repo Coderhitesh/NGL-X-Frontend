@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Hero from '../Hero/Hero'
 import OurClient from '../OurClient/OurClient'
 import TredingProduct from '../TradingProduct/TredingProduct'
@@ -8,6 +8,12 @@ import CollectionBanner from '../CollectionBanner/CollectionBanner'
 import WhyChoose from '../WhyChoose/WhyChoose'
 
 function Home() {
+  useEffect(()=>{
+    window.scrollTo({
+      top : 0,
+      behavior : "smooth"
+    })
+  },[])
   return (
     <>
       <Hero />

@@ -1,43 +1,52 @@
 import "./login.css";
 import bg from "./WhatsApp Image 2024-01-18 at 15.33.52_7543a4d2.jpg";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
+
 const Login = () => {
-  const navigate = useNavigate();
-  const [formdata, setformdata] = useState({ email: "", password: "" });
+  // const navigate = useNavigate(); // Uncommented and used
+  const [loading, setLoading] = useState(false); // Corrected initialization
+  const [formdata, setFormdata] = useState({ email: "", password: "" });
+  const navigate = useNavigate()
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setformdata({ ...formdata, [name]: value });
+    setFormdata({ ...formdata, [name]: value });
   };
-  useEffect(()=>{
+
+  useEffect(() => {
     window.scrollTo({
-      top : 0,
-      behavior : "smooth"
-    })
-  },[])
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(formdata)
+    setLoading(true); // Set loading to true when login starts
+    console.log(formdata);
     try {
       const response = await axios.post(
-        "https://nglx-cosmetic-backend-git-io.onrender.com/api/login",
+        "http://localhost:4100/api/login",
         formdata
       );
-      toast.success("Login SuccessFull");
-      const LoginToken = response.data.token;
-      sessionStorage.setItem('token', LoginToken);
-      sessionStorage.setItem("login", true)
-      sessionStorage.setItem("userid", response.data.user._id)
-      navigate('/Shop-All')
+      toast.success("Login Successful");
+      const loginToken = response.data.token;
+      sessionStorage.setItem('token', loginToken);
+      sessionStorage.setItem("login", true);
+      sessionStorage.setItem("userid", response.data.user._id);
+      navigate('/');
     } catch (error) {
       // console.error(error);
-
       // console.log(error.response.data.error)
-      toast.error(error.response.data.error);
+      toast.error('Login Failed');
+    } finally {
+      setLoading(false); // Set loading to false when login finishes
     }
   };
+
   return (
     <>
       <div className="login-container">
@@ -47,11 +56,11 @@ const Login = () => {
               <div className="heading">
                 <span>Welcome Back</span>
               </div>
-              <form action="" onSubmit={handleLogin} >
+              <form action="" onSubmit={handleLogin}>
                 <input
                   className="focus:ring-green-500"
                   name="email"
-                  value={formdata.Email}
+                  value={formdata.email}
                   onChange={handleInputChange}
                   type="email"
                   placeholder="Enter Your Email"
@@ -62,19 +71,20 @@ const Login = () => {
                   type="password"
                   name="password"
                   onChange={handleInputChange}
-                  value={formdata.Password}
+                  value={formdata.password}
                   placeholder="Enter Your Password"
                   id=""
                 />
                 <div className="button-box">
                   <div className="up-btn">
-                    <button className="btn-grad"  >LOGIN</button>
-                    {/* <button className="btn-grad">FORGET-PASSWORD</button> */}
+                    <button className="btn-grad" type="submit" disabled={loading}>
+                      {loading ? "Loading..." : "LOGIN"}
+                    </button>
+                    <Link to={'/forget-password'} className="btn-grad">FORGET-PASSWORD</Link>
                   </div>
                   <hr />
                   <div className="down-link">
-                    <span>Dont have an account ?</span>
-
+                    <span>Don't have an account?</span>
                     <Link to="/register">Register</Link>
                   </div>
                 </div>

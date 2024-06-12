@@ -29,7 +29,7 @@ const handlechange = (e) =>{
 const formdatafetch = async(e) =>{
     e.preventDefault()
     try {
-        const response = await axios.post('https://nglx-cosmetic-backend-git-io.onrender.com/api/createcontact',formdata);
+        const response = await axios.post('http://localhost:4100/api/createcontact',formdata);
         toast.success('Message Sent Successfully!')
         console.log(response)
     } catch (error) {

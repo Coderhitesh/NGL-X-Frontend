@@ -1,24 +1,21 @@
 import React from 'react';
-import './Profile.css'
+import './Profile.css';
+import Login from '../Auth/Login';
 
 function Profile() {
     const login = sessionStorage.getItem('login');
 
     return (
         <>
-
             <section className='Profile-section'>
                 <div className="Profile-container">
-
-                    {login === true ? (
-                        <>
-
-                        </>
-                    ) : (
-                        <p>Please log in to view your profile.</p>
-                    )}
+                    {login === 'false' ? (
+                        <Login />
+                    ) : login === 'true' ? (
+                        <p>Profile</p>
+                    ) :  <Login />}
                 </div>
-            </section >
+            </section>
         </>
     );
 }

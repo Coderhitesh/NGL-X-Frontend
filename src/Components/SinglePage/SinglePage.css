@@ -39,6 +39,7 @@
 
 .SinglePage-section .SinglePage-container .left .down .same-img {
     width: 21%;
+    cursor: pointer;
 }
 
 .SinglePage-section .SinglePage-container .left .down .same-img img {

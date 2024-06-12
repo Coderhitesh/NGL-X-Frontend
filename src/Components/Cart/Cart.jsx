@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import './Cart.css';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import './Cart.css';
+import cartbg from './cart.png'
 
 const Cart = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userid = sessionStorage.getItem("userid");
   const [cartItems, setCartItems] = useState([]);
   const [quantity, setQuantity] = useState({});
@@ -13,19 +14,17 @@ const Cart = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userid');
-    sessionStorage.setItem("login", false)
-    navigate('/login')
-    toast.success("Logout Successfull")
- }
+    sessionStorage.setItem("login", false);
+    navigate('/login');
+    toast.success("Logout Successful");
+  };
 
   useEffect(() => {
     if (userid) {
-      // Load cart items from session storage
       const storedCartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
       const userCartItems = storedCartItems.filter(item => item.userid === userid);
       setCartItems(userCartItems);
 
-      // Load quantities from session storage
       const storedQuantities = JSON.parse(sessionStorage.getItem('quantities')) || {};
       setQuantity(storedQuantities);
     }
@@ -36,10 +35,10 @@ const Cart = () => {
       setQuantity(prevQuantity => {
         const newQuantity = { ...prevQuantity, [item._id]: (prevQuantity[item._id] || 1) - 1 };
         if (newQuantity[item._id] <= 0) {
-          // Remove item from cart if quantity is 0
           handleRemove(item);
+        } else {
+          sessionStorage.setItem('quantities', JSON.stringify(newQuantity));
         }
-        sessionStorage.setItem('quantities', JSON.stringify(newQuantity)); // Update sessionStorage
         return newQuantity;
       });
     }
@@ -49,7 +48,7 @@ const Cart = () => {
     if (item && item._id) {
       setQuantity(prevQuantity => {
         const newQuantity = { ...prevQuantity, [item._id]: (prevQuantity[item._id] || 1) + 1 };
-        sessionStorage.setItem('quantities', JSON.stringify(newQuantity)); // Update sessionStorage
+        sessionStorage.setItem('quantities', JSON.stringify(newQuantity));
         return newQuantity;
       });
     }
@@ -59,14 +58,14 @@ const Cart = () => {
     if (item && item._id) {
       setCartItems(prevCartItems => {
         const updatedCartItems = prevCartItems.filter(cartItem => cartItem._id !== item._id);
-        sessionStorage.setItem('cartItems', JSON.stringify(updatedCartItems)); // Update sessionStorage
+        sessionStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         return updatedCartItems;
       });
 
       setQuantity(prevQuantity => {
         const newQuantity = { ...prevQuantity };
         delete newQuantity[item._id];
-        sessionStorage.setItem('quantities', JSON.stringify(newQuantity)); // Update sessionStorage
+        sessionStorage.setItem('quantities', JSON.stringify(newQuantity));
         return newQuantity;
       });
     }
@@ -76,8 +75,37 @@ const Cart = () => {
   const totalMainPrice = cartItems.reduce((acc, item) => acc + (item.mainPrice * (quantity[item._id] || 1)), 0);
   sessionStorage.setItem("Price", totalAmount);
 
+  const handleCheckout = () => {
+    const orderData = {
+      items: cartItems,
+      quantities: quantity,
+      totalMRP: totalMainPrice,
+      finalPrice: totalAmount,
+      shippingFee: 50 // Example shipping fee, adjust as necessary
+    };
+    sessionStorage.setItem('orderData', JSON.stringify(orderData));
+    navigate('/cart/finalcart');
+  };
+
+  if (cartItems.length === 0){
+    return(
+      <>
+        <section className='cart-section'>
+        <div className="cart-container">
+          <div className="empty-box">
+            <img src={cartbg} alt="" />
+            <p>Your Cart is empty</p>
+            <Link className='btn-grad' to={'/Shop-All'}>Go to Shopping</Link>
+            </div>
+        </div>
+        </section>
+      </>
+    )
+  }
+
   return (
-    <div>
+
+    <>
       <section className='cart-section'>
         <div className="cart-container">
           <div className="heading">
@@ -126,13 +154,15 @@ const Cart = () => {
                 </div>
               </div>
               <p>Pan India Free Shipping for orders above ₹450</p>
-              <button> <i className="ri-git-repository-private-fill"></i> CHECKOUT SECURELY</button>
+              <button onClick={handleCheckout} className='CHECKOUT-btn'>
+                <i className="ri-git-repository-private-fill"></i> CHECKOUT SECURELY
+              </button>
             </div>
           </div>
         </div>
       </section>
       <button onClick={handleLogout}>logout</button>
-    </div>
+    </>
   );
 };
 

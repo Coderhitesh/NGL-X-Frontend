@@ -8,7 +8,7 @@ function Hero() {
   useEffect(() => {
     const dataFetch = async () => {
       try {
-        const response = await axios.get('https://nglx-cosmetic-backend-git-io.onrender.com/api/get-Banners');
+        const response = await axios.get('http://localhost:4100/api/get-Banners');
         console.log(response.data.data);
         setBanners(response.data.data);
       } catch (error) {

@@ -37,7 +37,7 @@
     width: 23%;
     position: relative;
     overflow: hidden;
-    height: 281px;
+    height: 295px;
 }
 
 .ShopAll-section .container .main-container .col img{
@@ -84,6 +84,10 @@
         width: 46%;
         position: relative;
         overflow: hidden;
+    }
+
+    .ShopAll-section .container .main-container .col{
+        height: 210px;
     }
     
 }

@@ -93,5 +93,10 @@
     .singleProduct-section .container .main-container .col{
         width: 46%;
     }
+
+    .singleProduct-section .container .main-container .col .img{
+        width: 100%;
+        height: 230px;
+    }
     
 }

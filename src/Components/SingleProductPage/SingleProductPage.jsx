@@ -11,7 +11,7 @@ function SingleProductPage() {
 
     const fetchdata = async() => {
         try {
-            const response = await axios.get('https://nglx-cosmetic-backend-git-io.onrender.com/api/getAllProducts')
+            const response = await axios.get('http://localhost:4100/api/getAllProducts')
             console.log(response.data.data)
             const filterdata = response.data.data
             const filtered = filterdata.filter((item)=> item.categories === category)

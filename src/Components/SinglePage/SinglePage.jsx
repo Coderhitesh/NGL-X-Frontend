@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './SinglePage.css';
 import warrenty from './warrenty.png';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 function SinglePage() {
+  const navigate = useNavigate();
   const login = sessionStorage.getItem("login");
   const userid = sessionStorage.getItem("userid");
-  // console.log(userid);
   const [data, setData] = useState([]);
   const { _id } = useParams();
 
@@ -19,7 +19,7 @@ function SinglePage() {
 
   const dataFetching = async () => {
     try {
-      const res = await axios.get('https://nglx-cosmetic-backend-git-io.onrender.com/api/getAllProducts');
+      const res = await axios.get('http://localhost:4100/api/getAllProducts');
       const fetchData = res.data.data;
       const fetched = fetchData.filter((item) => item._id === _id);
       setData(fetched);
@@ -79,6 +79,13 @@ function SinglePage() {
     });
   
     toast.success("Product is added to cart");
+  };
+
+  const handleBuyNow = async (item) => {
+    await handleAddToCart(item);
+    setTimeout(() => {
+      navigate('/cart');
+    }, 1000);
   };
   
   const handleIncrease = (item) => {
@@ -156,7 +163,6 @@ function SinglePage() {
               <span>Incl. of all taxes</span>
             </div>
             <h2>{item.productName}</h2>
-            {/* <strong>{item.details}</strong> */}
             <div className="star">
               <i className="ri-star-fill"></i>
               <p>(4.8|304)</p>
@@ -204,7 +210,7 @@ function SinglePage() {
                 login ? <button className='btn-grad' onClick={() => handleAddToCart(item)}>Add to Cart</button> : 
                 <Link to={'/login'}><button className='btn-grad'>Add to Cart</button></Link>
               }
-              <a href="" className='btn-grad'>Buy Now</a>
+              <button className='btn-grad' onClick={() => handleBuyNow(item)}>Buy Now</button>
             </div>
           </div>
         ))}
